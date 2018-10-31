@@ -20,19 +20,21 @@
         <span class="title">登录</span>
     </header>
     <div class="cz_container">
-        <div class="form_box">
-            <div class="mui-input-row">
-                <input name="name" type="text" placeholder="用户名/手机号">
+        <form>
+            <div class="form_box">
+                <div class="mui-input-row">
+                    <input name="username" type="text" placeholder="用户名/手机号">
+                </div>
+                <div class="mui-input-row">
+                    <input name="password" type="password" placeholder="密码" class="mui-input-password">
+                    <span class="mui-icon mui-icon-eye"></span>
+                </div>
+                <button class="mui-btn mui-btn-primary btn_login">登录</button>
+                <div class="mui-input-row cz_text">
+                    <a href="register.html">免费注册</a>
+                </div>
             </div>
-            <div class="mui-input-row">
-                <input name="pass" type="password" placeholder="密码" class="mui-input-password">
-                <span class="mui-icon mui-icon-eye"></span>
-            </div>
-            <a href="index.html" class="mui-btn mui-btn-primary btn_login">登录</a>
-            <div class="mui-input-row cz_text">
-                <a href="register.html">免费注册</a>
-            </div>
-        </div>
+        </form>
     </div>
     <footer class="cz_tabs">
         <a class="tab_home fa fa-home" href="../index.html"><span>首页</span></a>
@@ -41,6 +43,34 @@
         <a class="tab_user fa fa-user" href="../user/index.html"><span>会员中心</span></a>
     </footer>
 </div>
+<script src="/js/jquery-1.12.4.min.js"></script>
 <script src="../res/mui/js/mui.min.js"></script>
+<script>
+    var search = location.search.slice(1);
+    var reg = /url=(.+)/;
+    var match = reg.exec(search);
+    var url = match && match[1];
+    url = url || '/index.html';
+
+
+    $('form').on('submit',function(){
+        var data = $(this).serialize();
+        $.ajax({
+            url: '/api/user/login',
+            data: data,
+            type: 'post',
+            success: function(data){
+                if(data.error){
+                    alert('登录失败,' + data.message );
+                } else {
+                    alert('登录成功');
+                    location.href = url;
+                }
+            }
+        });
+        return false;
+    })
+    
+</script>
 </body>
 </html>

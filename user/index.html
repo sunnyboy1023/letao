@@ -25,8 +25,8 @@
                 <a class="mui-navigate-right" href="#account">
                     <img class="mui-media-object mui-pull-left head-img" id="head-img" src="../images/user.jpg">
                     <div class="mui-media-body">
-                        Hello MUI
-                        <p class="mui-ellipsis">账号:hellomui</p>
+                        Hello 
+                        <p class="mui-ellipsis">账号:</p>
                     </div>
                 </a>
             </li>
@@ -43,7 +43,7 @@
             </li>
         </ul>
         <div class="p20">
-            <a href="login.html" class="mui-btn btn_outLogin">退出登录</a>
+            <button class="mui-btn btn_outLogin">退出登录</button>
         </div>
     </div>
     <footer class="cz_tabs">
@@ -53,6 +53,35 @@
         <a class="tab_user fa fa-user now" href="../user/index.html"><span>会员中心</span></a>
     </footer>
 </div>
+<script src="/js/jquery-1.12.4.min.js"></script>
 <script src="../res/mui/js/mui.min.js"></script>
+<script>
+    $.ajax({
+        url: '/api/user/queryUserMessage',
+        type: 'get',
+        success: function(data){
+            if(data.error == 400){
+                alert('当前未登录');
+                location.href = '/user/login.html?url=' + location.href;
+            } else if ( data.id ){
+                $('p.mui-ellipsis').text('账号: '+ data. username);
+            }
+        }
+    })
+
+    $('.btn_outLogin').on('click',function(){
+        $.ajax({
+            url: '/api/user/logout',
+            type: 'get',
+            success: function(data){
+                if(data.success){
+                    alert('退出成功');
+                    location.href = '/user/login.html' ;
+                }
+            }
+        });
+        return false;
+    })
+</script>
 </body>
 </html>
