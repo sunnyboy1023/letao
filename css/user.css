@@ -11,6 +11,11 @@ body{
     margin: 20px 0;
 }
 
+.btn_addAddress {
+    display: block;
+    margin: 15px 20px;
+}
+
 [type="text"][name="vCode"]{
     width: 60%;
     float: left;
