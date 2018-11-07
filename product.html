@@ -1,40 +1,61 @@
 <!DOCTYPE html>
 <html>
+
 <head lang="en">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0" />
     <meta content="yes" name="apple-mobile-web-app-capable">
     <meta content="black" name="apple-mobile-web-app-status-bar-style">
     <meta content="telephone=no" name="format-detection">
     <title>传智云购-搜索中心</title>
     <link type="image/x-icon" rel="shortcut icon" href="images/favicon.ico">
-    <link rel="stylesheet" href="res/mui/css/mui.min.css"/>
-    <link rel="stylesheet" href="res/fontAwesome/css/font-awesome.min.css"/>
-    <link rel="stylesheet" href="css/common.css"/>
-    <link rel="stylesheet" href="css/product.css"/>
+    <link rel="stylesheet" href="res/mui/css/mui.min.css" />
+    <link rel="stylesheet" href="res/fontAwesome/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="css/common.css" />
+    <link rel="stylesheet" href="css/product.css" />
+    <style>
+        span.btn_size {
+            margin: 2px 0;
+        }
+
+        span.btn_size.active {
+            border-color: red;
+            color: red;
+            background-color: #eee;
+        }
+        #num {
+            text-align: center;
+        }
+        .jia.disabled,
+        .jian.disabled {
+            color: #fff;
+            background-color: #ccc;
+        }
+    </style>
 </head>
+
 <body>
-<div class="cz_layout">
-    <header class="cz_topBar">
-        <a href="javascript:history.back();" class="icon_back fa fa-arrow-left"></a>
-        <span class="title">商品详情</span>
-        <a href="index.html" class="icon_home fa fa-home"></a>
-    </header>
-    <div class="cz_container ">
-        <div class="mui-scroll-wrapper">
-            <div class="mui-scroll" id="content">
-               
+    <div class="cz_layout">
+        <header class="cz_topBar">
+            <a href="javascript:history.back();" class="icon_back fa fa-arrow-left"></a>
+            <span class="title">商品详情</span>
+            <a href="index.html" class="icon_home fa fa-home"></a>
+        </header>
+        <div class="cz_container ">
+            <div class="mui-scroll-wrapper">
+                <div class="mui-scroll" id="detail">
+
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div class="p_option">
-    <a href="#" class="btn_cart fa fa-shopping-cart"></a>
-    <a href="#" class="btn_addCart">加入购物车</a>
-    <a href="#" class="btn_pay">立即购买</a>
-</div>
-<script type="text/template" id="tpl">
-    <div class="cz_banner mui-slider">
+    <div class="p_option">
+        <a href="/cart.html" class="btn_cart fa fa-shopping-cart"></a>
+        <a href="javascript:;" class="btn_addCart">加入购物车</a>
+        <a href="#" class="btn_pay">立即购买</a>
+    </div>
+    <script type="text/template" id="tpl">
+        <div class="cz_banner mui-slider">
         <div class="mui-slider-group mui-slider-loop">
             <div class="mui-slider-item mui-slider-item-duplicate">
                 <a href="javascript:;"><img src="/api/{{pic[pic.length-1].picAddr}}"></a>
@@ -71,71 +92,126 @@
     </div>
     <div class="p_number">
         数量：
-        <span class="jian">-</span><input type="tel"/><span class="jia">+</span>
-        剩余：<span>{{num}}</span> 件
+        <span class="jian disabled">-</span><input id="num" value="1" type="tel"/><span class="jia">+</span>
+        剩余：<span id="total">{{num}}</span> 件
+        <div>&nbsp;</div>
+        <div>&nbsp;</div>
+        
+        
     </div>
-</script>
-<script src="/js/jquery-1.12.4.min.js"></script>
-<script src="/js/art-template/template-web.js"></script>
-<script src="res/mui/js/mui.min.js"></script>
-<script src="res/mui/js/mui.lazyload.js"></script>
-<script src="res/mui/js/mui.lazyload.img.js"></script>
-<script>
-   
+    </script>
+    <script src="/js/jquery-1.12.4.min.js"></script>
+    <script src="/js/art-template/template-web.js"></script>
+    <script src="res/mui/js/mui.min.js"></script>
+    <script src="res/mui/js/mui.lazyload.js"></script>
+    <script src="res/mui/js/mui.lazyload.img.js"></script>
+    <script>
+        var info = {};
+        location.search.slice(1).split('&').forEach(function (value) {
+            var tmp = value.split('=');
+            info[tmp[0]] = tmp[1];
+        })
 
-    var  info = {};
-    location.search.slice(1).split('&').forEach(function(value){
-        var tmp = value.split('=');
-        info[tmp[0]] = tmp[1];
-    })
+        $.ajax({
+            url: '/api/product/queryProductDetail',
+            type: 'get',
+            data: {
+                id: info.id
+            },
+            success: function (data) {
+                var discount = data.price * 10 / data.oldPrice;
+                data.discount = discount.toFixed(1);
 
-    $.ajax({
-        url: '/api/product/queryProductDetail',
-        type: 'get',
-        data: {id: info.id},
-        success: function(data){
-            var discount = data.price*10/data.oldPrice;
-            data.discount = discount.toFixed(1);
+                var minSize = Number(data.size.split('-')[0]);
+                var maxSize = data.size.split('-')[1];
+                data.sizeNum = [];
+                for (var i = minSize; i <= maxSize; i++) {
+                    data.sizeNum.push(i);
+                }
+                var html = template('tpl', data);
+                $('#detail').html(html);
+                console.log(data)
 
-            var minSize = Number(data.size.split('-')[0]);
-            var maxSize = data.size.split('-')[1];
-            data.sizeNum = [];
-            for( var i = minSize; i<= maxSize ; i++) {
-                data.sizeNum.push(i);
+                mui(function () {
+                    mui('.mui-slider').slider({
+                        interval: 3000 //自动轮播周期，若为0则不自动播放，默认为0；
+                    });
+                    mui('.mui-scroll-wrapper').scroll({
+                        scrollY: true, //是否竖向滚动
+                        scrollX: false, //是否横向滚动
+                        startX: 0, //初始化时滚动至x
+                        startY: 0, //初始化时滚动至y
+                        indicators: false, //是否显示滚动条
+                        deceleration: 0.0006, //阻尼系数,系数越小滑动越灵敏
+                        bounce: true, //是否启用回弹
+                    });
+
+                });
             }
-            var html = template('tpl', data);
-            $('#content').html(html);
-            console.log(data)
+        })
 
-            mui(function(){
-                mui('.mui-slider').slider({
-                    interval:3000 //自动轮播周期，若为0则不自动播放，默认为0；
-                });
-                mui('.mui-scroll-wrapper').scroll({
-                    scrollY: true, //是否竖向滚动
-                    scrollX: false, //是否横向滚动
-                    startX: 0, //初始化时滚动至x
-                    startY: 0, //初始化时滚动至y
-                    indicators: false, //是否显示滚动条
-                    deceleration:0.0006, //阻尼系数,系数越小滑动越灵敏
-                    bounce: true, //是否启用回弹
-                });
-                mui.init({
-                    pullRefresh: {
-                        container: '.mui-scroll-wrapper',
-                        down: {
-                            callback: function(){
-                                setTimeout(function(){
-                                    mui('.mui-scroll-wrapper').pullRefresh().endPulldownToRefresh(); //refresh completed
-                                },1000);
-                            }
-                        }
+
+        $('#detail').on('click', 'span.btn_size', function () {
+            $(this).addClass('active').siblings().removeClass('active');
+        }).on('click', 'span.jia', function () {
+            var num = Number($('#num').val());
+            if (num >= 1) $('.jian').removeClass('disabled');
+            if (num == $('#total').text() - 1) $(this).addClass('disabled');
+
+            if (num < $('#total').text()) {
+                $('#num').val(++num);
+            } else {
+                return;
+            }
+        }).on('click', 'span.jian', function () {
+            var num = Number($('#num').val());
+            if (num <= $('#total').text()) $('.jia').removeClass('disabled');
+            if (num <= 2) $(this).addClass('disabled');
+            if (num >= 2) $('#num').val(--num);
+        }).on('blur', '#num', function () {
+            var num = Number($(this).val());
+            var total = Number($('#total').text());
+            if (num < 1) {
+                $(this).val(1);
+                $('.jian').addClass('disabled');
+                $('.jia').removeClass('disabled');
+            }
+            if (num > total) {
+                $(this).val(total);
+                $('.jia').addClass('disabled');
+                $('.jian').removeClass('disabled');
+            }
+        })
+
+        $('.btn_addCart').on('click', function(){
+            var size = $('.btn_size.active').text();
+            var num  = $('#num').val();
+            if(!size) {
+                mui.alert('请选择尺码');
+                return;
+            }
+            $.ajax({
+                url: '/api/cart/addCart',
+                type: 'post',
+                data: {
+                    productId: info.id,
+                    num: num,
+                    size: size
+                },
+                success: function(data){
+                    console.log(data);
+                    if( data.error ){
+                        mui.alert(data.message,'提示','确认',function () {
+                                location.href = '/user/login.html?url=' + location.href;
+                            });
+                    } else {
+                        mui.toast('加入购物车成功');
                     }
-                });
-            });
-        }
-    })
-</script>
+                }
+            })
+        })
+    </script>
 
 </body>
+
 </html>

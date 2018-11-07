@@ -82,7 +82,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="javascript:;">
+                            <a href="javascript:;" class="sign_out">
                                 <i class="fa fa-sign-out"></i>
                                 退出
                             </a>
@@ -167,6 +167,22 @@
         // 使用刚指定的配置项和数据显示图表。
         myChart.setOption(option);
 
+        $('.sign_out').on('click', function(){
+            alert(1)
+            $.ajax({
+                url: '/api/employee/employeeLogout',
+                type: 'get',
+                success: function(data){
+                    console.log(data);
+                    if(data.error){
+                        alert(data.message);
+                    } else {
+                        alert('退出成功，即将返回登录页');
+                        location.href = '/admin/login.html';
+                    }
+                }
+            })
+        })
     </script>
 </body>
 </html>

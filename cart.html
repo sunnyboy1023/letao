@@ -12,6 +12,12 @@
     <link rel="stylesheet" href="res/fontAwesome/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="css/common.css"/>
     <link rel="stylesheet" href="css/cart.css"/>
+    <style>
+    .cz_container {
+        padding-top: 0;
+        margin-top: 45px;
+    }
+    </style>
 </head>
 <body>
 <div class="cz_layout">
@@ -21,84 +27,10 @@
         <a href="javascript:;" class="icon_refresh fa fa-refresh"></a>
     </header>
     <div class="cz_container mui-scroll-wrapper">
-        <ul class="mui-table-view mui-scroll">
-            <li data-product="" class="mui-table-view-cell">
-                <div class="mui-slider-right mui-disabled">
-                    <a class="mui-btn mui-btn-blue">编辑</a>
-                    <a class="mui-btn mui-btn-red">删除</a>
-                </div>
-                <a href="javascript:;" class="mui-navigate-right mui-slider-handle">
-                    <img class="mui-media-object mui-pull-left" src="images/product.jpg">
-                    <div class="mui-media-body">
-                        <p class="name">热风2016年冬季新款男鞋高帮休闲皮鞋舒适韩版平底鞋H13M6315</p>
-                        <p class="info">
-                            <span class="price">&yen;100.00</span>
-                            <span class="oldPrice">&yen;299.90</span>
-                            <span class="number">x1</span>
-                        </p>
-                        <p><span class="size">鞋码：42</span></p>
-                    </div>
-                    <input type="checkbox"/>
-                </a>
-            </li>
-            <li data-product="" class="mui-table-view-cell">
-                <div class="mui-slider-right mui-disabled">
-                    <a class="mui-btn mui-btn-blue">编辑</a>
-                    <a class="mui-btn mui-btn-red">删除</a>
-                </div>
-                <a href="javascript:;" class="mui-navigate-right mui-slider-handle">
-                    <img class="mui-media-object mui-pull-left" src="images/product.jpg">
-                    <div class="mui-media-body">
-                        <p class="name">热风2016年冬季新款男鞋高帮休闲皮鞋舒适韩版平底鞋H13M6315</p>
-                        <p class="info">
-                            <span class="price">&yen;100.00</span>
-                            <span class="oldPrice">&yen;299.90</span>
-                            <span class="number">x1</span>
-                        </p>
-                        <p><span class="size">鞋码：42</span></p>
-                    </div>
-                    <input type="checkbox"/>
-                </a>
-            </li>
-            <li data-product="" class="mui-table-view-cell">
-                <div class="mui-slider-right mui-disabled">
-                    <a class="mui-btn mui-btn-blue">编辑</a>
-                    <a class="mui-btn mui-btn-red">删除</a>
-                </div>
-                <a href="javascript:;" class="mui-navigate-right mui-slider-handle">
-                    <img class="mui-media-object mui-pull-left" src="images/product.jpg">
-                    <div class="mui-media-body">
-                        <p class="name">热风2016年冬季新款男鞋高帮休闲皮鞋舒适韩版平底鞋H13M6315</p>
-                        <p class="info">
-                            <span class="price">&yen;100.00</span>
-                            <span class="oldPrice">&yen;299.90</span>
-                            <span class="number">x1</span>
-                        </p>
-                        <p><span class="size">鞋码：42</span></p>
-                    </div>
-                    <input type="checkbox"/>
-                </a>
-            </li>
-            <li data-product="" class="mui-table-view-cell">
-                <div class="mui-slider-right mui-disabled">
-                    <a class="mui-btn mui-btn-blue">编辑</a>
-                    <a class="mui-btn mui-btn-red">删除</a>
-                </div>
-                <a href="javascript:;" class="mui-navigate-right mui-slider-handle">
-                    <img class="mui-media-object mui-pull-left" src="images/product.jpg">
-                    <div class="mui-media-body">
-                        <p class="name">热风2016年冬季新款男鞋高帮休闲皮鞋舒适韩版平底鞋H13M6315</p>
-                        <p class="info">
-                            <span class="price">&yen;100.00</span>
-                            <span class="oldPrice">&yen;299.90</span>
-                            <span class="number">x1</span>
-                        </p>
-                        <p><span class="size">鞋码：42</span></p>
-                    </div>
-                    <input type="checkbox"/>
-                </a>
-            </li>
-        </ul>
+        <div class="mui-table-view mui-scroll">
+            <ul class="mui-table-view mui-table-view-chevron"  id="list">
+            </ul>
+        </div>
         <div class="cart_order">订单总额：&yen;1022.00 <a href="#">生成订单</a></div>
     </div>
     <footer class="cz_tabs">
@@ -108,33 +40,97 @@
         <a class="tab_user fa fa-user" href="user/index.html"><span>会员中心</span></a>
     </footer>
 </div>
+<script type="text/template" id="tpl">
+    {{each data as val}}
+    <li data-product="" class="mui-table-view-cell">
+        <div class="mui-slider-right mui-disabled">
+            <a data-id="{{val.id}}" class="mui-btn mui-btn-blue">编辑</a>
+            <a data-id="{{val.id}}" class="mui-btn mui-btn-red">删除</a>
+        </div>
+        <a href="javascript:;" class="mui-navigate-right mui-slider-handle">
+            <img class="mui-media-object mui-pull-left" src="images/product.jpg">
+            <div class="mui-media-body">
+                <p class="name">{{val.proName}}</p>
+                <p class="info">
+                    <span class="price">&yen;{{val.price}}</span>
+                    <span class="oldPrice">&yen;{{val.oldPrice}}</span>
+                    <span class="number">{{val.num}}</span>
+                </p>
+                <p><span class="size">鞋码：{{val.size}}</span></p>
+            </div>
+            <input type="checkbox"/>
+        </a>
+    </li>
+    {{/each}}
+</script>
+<script src="./js/jquery-1.12.4.min.js"></script>
+<script src="./js/art-template/template-web.js"></script>
 <script src="res/mui/js/mui.min.js"></script>
 <script>
+    var page, pageSize = 5;
     mui(function(){
-        mui.init();
-        mui('.mui-table-view').on('tap','.mui-btn-red',function() {
-            var btnArray = ['是', '否'];
-            mui.confirm('你要删除这件商品吗？', '温馨提示', btnArray, function(e) {
-                if (e.index == 0) {
-
-                } else {
-
+        mui.init({
+            pullRefresh : {
+                container:".cz_container",
+                down : {
+                    height:50,//可选,默认50.触发下拉刷新拖动距离,
+                    auto: true,//可选,默认false.首次加载自动下拉刷新一次
+                    contentdown : "下拉可以刷新",//可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
+                    contentover : "释放立即刷新",//可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
+                    contentrefresh : "正在刷新...",//可选，正在刷新状态时，下拉刷新控件上显示的标题内容
+                    callback : function(){
+                        page = 1;
+                        $.ajax({
+                            url: '/api/cart/queryCartPaging',
+                            data: {
+                                page: page,
+                                pageSize: pageSize
+                            },
+                            type: 'get',
+                            success: function(data){
+                                if(data.error){
+                                    mui.alert( data.message,'提示', '确认', function(){
+                                        location.href = '/user/login.html?url=' + location.href;
+                                    })
+                                }
+                                // console.log(data)
+                                var html = template('tpl', data);
+                                $('#list').html(html);
+                            }
+                        })
+                        mui('.cz_container').pullRefresh().endPulldownToRefresh();
+                        mui('.cz_container').pullRefresh().enablePullupToRefresh();
+                    } //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+                },
+                up : {
+                    height:50,//可选.默认50.触发上拉加载拖动距离
+                    auto:true,//可选,默认false.自动上拉加载一次
+                    contentrefresh : "正在加载...",//可选，正在加载状态时，上拉加载控件上显示的标题内容
+                    contentnomore:'没有更多数据了',//可选，请求完毕若没有更多数据时显示的提醒内容；
+                    callback : function(){
+                        page++;
+                        $.ajax({
+                            url: '/api/cart/queryCartPaging',
+                            data: {
+                                page: page,
+                                pageSize: pageSize
+                            },
+                            type: 'get',
+                            success: function(data){
+                                // console.log(data)
+                                var html = template('tpl', data);
+                                $('#list').append(html);
+                                var flag = data.length == 0 ? true : false; 
+                                mui('.cz_container').pullRefresh().endPullupToRefresh(flag);
+                            }
+                        })
+                    } //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
                 }
-            })
+            }
         });
-        mui('.mui-table-view').on('tap','.mui-btn-blue', function(e) {
-            e.detail.gesture.preventDefault(); //修复iOS 8.x平台存在的bug，使用plus.nativeUI.prompt会造成输入法闪一下又没了
-            var btnArray = ['确定', '取消'];
-            var template = '<input type="number" placeholder="选择数量"/><br>' +
-                    '<input type="text" placeholder="选择尺码" />';
-            mui.confirm(template, '编辑商品', btnArray, function(e) {
-                if (e.index == 0) {
+        
+        
 
-                } else {
-
-                }
-            })
-        });
         mui('.mui-scroll-wrapper').scroll({
             scrollY: true, //是否竖向滚动
             scrollX: false, //是否横向滚动
@@ -145,6 +141,77 @@
             bounce: true, //是否启用回弹
         });
     });
+
+    $('.cz_container').on('tap', '.mui-btn-blue', function(){
+        var id = this.dataset.id;
+        var btnArray = ['确定', '取消'];
+        var plate = '<input type="number" class="proSize" placeholder="选择数量"/><br>' +
+                '<input type="text" class="proNum" placeholder="选择尺码" />';
+        mui.confirm(plate, '编辑商品', btnArray, function(e) {
+            if (e.index == 0) {
+                var size = $('.proSize').val();
+                var num = $('.proNum').val();
+                if(size && num) {
+                    $.ajax({
+                        url: '/api/cart/updateCart',
+                        type: 'post',
+                        data: {
+                            id: id,
+                            size: size,
+                            num: num
+                        },
+                        success: function(data){
+                            console.log(template)
+                            if(data.success){
+                                mui.alert('修改成功');
+                                page = 1;
+                                $.ajax({
+                                    url: '/api/cart/queryCartPaging',
+                                    data: {
+                                        page: page,
+                                        pageSize: pageSize
+                                    },
+                                    type: 'get',
+                                    success: function(info){
+                                        if(info.error){
+                                            mui.alert( info.message,'提示', '确认', function(){
+                                                location.href = '/user/login.html?url=' + location.href;
+                                            })
+                                        }
+                                        console.log(info)
+                                        var html = template('tpl', info);
+                                        $('#list').html(html);
+                                    }
+                                })
+                            }
+                        }
+                    })
+                }
+            } 
+        } )
+    }).on('tap', '.mui-btn-red', function(){
+        var _this = this;
+        console.log(_this.dataset.id)
+        mui.confirm('确认删除吗？', '提示', ['是', '否'], function(e){
+            if(e.index == 0) {
+                $.ajax({
+                    url: '/api/cart/deleteCart',
+                    type: 'get',
+                    data: {id: [_this.dataset.id]},
+                    success: function(data){
+                        if(data.error){
+                            mui.alert('删除失败');
+                        } else {
+                            mui.alert('删除成功');
+                            $(_this).parents('li').remove();
+                        }
+                    }
+                })
+                
+            }
+        })
+    })
+    
 </script>
 </body>
 </html>
